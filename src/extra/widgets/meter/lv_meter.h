@@ -47,17 +47,27 @@ typedef struct {
     int32_t min;
     int32_t max;
     int16_t r_mod;
+
     uint16_t angle_range;
     int16_t rotation;
+    uint8_t reverse;
+    uint8_t toggle_needle_side;
 } lv_meter_scale_t;
 
 enum {
     LV_METER_INDICATOR_TYPE_NEEDLE_IMG,
     LV_METER_INDICATOR_TYPE_NEEDLE_LINE,
     LV_METER_INDICATOR_TYPE_SCALE_LINES,
+    LV_METER_INDICATOR_TYPE_NEEDLE_TRIANGLE,
     LV_METER_INDICATOR_TYPE_ARC,
 };
 typedef uint8_t lv_meter_indicator_type_t;
+
+enum {
+    LV_METER_INDICATOR_FORM_ROUND,
+    LV_METER_INDICATOR_FORM_LINEAR,
+};
+typedef uint8_t lv_meter_indicator_form_t;
 
 typedef struct {
     lv_meter_scale_t * scale;
@@ -95,6 +105,7 @@ typedef struct {
     lv_obj_t obj;
     lv_ll_t scale_ll;
     lv_ll_t indicator_ll;
+    lv_meter_indicator_form_t form;
 } lv_meter_t;
 
 extern const lv_obj_class_t lv_meter_class;
@@ -253,6 +264,39 @@ void lv_meter_set_indicator_start_value(lv_obj_t * obj, lv_meter_indicator_t * i
  * @param value         the new value
  */
 void lv_meter_set_indicator_end_value(lv_obj_t * obj, lv_meter_indicator_t * indic, int32_t value);
+
+
+/*=====================
+ * Set indicator options
+ *====================*/
+
+
+/**
+ * Set indicator form. By default for is 'LV_METER_INDICATOR_FORM_ROUND'
+ * For the classical 'LV_METER_INDICATOR_FORM_ROUND' meter
+ * height and width of the 'obj' must be the same!
+ * @param obj           pointer to a meter object
+ * @param form          type of meter form
+ */
+void lv_meter_set_indicator_form(lv_obj_t * obj, lv_meter_indicator_form_t form);
+
+/**
+ * Set scale direction. Usable for vertical meter.
+ * By default scale is from left to right(horizontal meter)
+ * and top to bottom(vertical meter)
+ * @param scale         scale
+ * @param reverse_is_on enable reverse scale
+ */
+void lv_meter_set_direction(lv_meter_scale_t * scale, bool reverse_is_on);
+
+/**
+ * Swap labels with needle. Usable for vertical meter.
+ * By default needle is under the scale and labels is above the scale(horizontal meter)
+ * For the vertical meter: needle is on the right and labels is on the left
+ * @param scale         scale
+ * @param reverse_is_on enable reverse scale
+ */
+void lv_meter_set_needle_side(lv_meter_scale_t * scale, bool toggle_side);
 
 /**********************
  *      MACROS
